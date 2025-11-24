@@ -1,0 +1,8 @@
+:root{
+  --accent:#6f42c1;
+}
+body{background:#f7f9fc}
+.card{border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+#connection-indicator{opacity:.9}
+.status-pill{font-size:.8rem;padding:.25rem .5rem;border-radius:999px}
+.msg-flag{font-size:.75rem}

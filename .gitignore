@@ -1,0 +1,30 @@
+# Environment variables - NEVER commit these to git
+.env
+.env.local
+.env.*.local
+
+# WhatsApp authentication cache
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Node dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+*.log
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+/tmp/
+*.tmp

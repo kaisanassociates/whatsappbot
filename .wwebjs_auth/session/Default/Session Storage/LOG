@@ -1,3 +1,2 @@
-2025/11/24-10:45:16.996 5a38 Reusing MANIFEST C:\Users\HP\Downloads\influencia_whatsapp_suite\whatsapp-bot\.wwebjs_auth\session\Default\Session Storage/MANIFEST-000001
-2025/11/24-10:45:16.997 5a38 Recovering log #3
-2025/11/24-10:45:16.998 5a38 Reusing old log C:\Users\HP\Downloads\influencia_whatsapp_suite\whatsapp-bot\.wwebjs_auth\session\Default\Session Storage/000003.log 
+2025/11/24-09:59:56.015 31f1 Creating DB /workspaces/whatsappbot/.wwebjs_auth/session/Default/Session Storage since it was missing.
+2025/11/24-09:59:56.026 31f1 Reusing MANIFEST /workspaces/whatsappbot/.wwebjs_auth/session/Default/Session Storage/MANIFEST-000001

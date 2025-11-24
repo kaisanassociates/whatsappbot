@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>INFLUENCIA Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/app.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%236f42c1'>📱</text></svg>" />
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">INFLUENCIA Dashboard</span>
+        <div id="connection-indicator" class="text-white small">Connecting...</div>
+      </div>
+    </nav>
+
+    <main class="container my-4">
+      <div id="login" class="card p-3 mb-4">
+        <h5>Dashboard Access</h5>
+        <p class="text-muted">Enter your dashboard key to unlock the UI.</p>
+        <div class="input-group mb-2">
+          <input id="dashboardKey" class="form-control" placeholder="Dashboard key" />
+          <button id="btnUnlock" class="btn btn-primary">Unlock</button>
+        </div>
+        <div id="loginMsg" class="text-danger small"></div>
+      </div>
+
+      <div id="app" style="display:none">
+        <div class="row g-3 mb-4" id="statsRow"></div>
+
+        <!-- Scheduler Control -->
+        <div class="card mb-4">
+          <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">⚙️ Auto-Scheduler Control</h6>
+            <div>
+              <span id="schedulerStatus" class="badge bg-secondary me-2">Loading...</span>
+              <button id="btnToggleScheduler" class="btn btn-sm btn-primary">Toggle</button>
+            </div>
+          </div>
+          <div class="card-body small text-muted">
+            Auto-schedulers run on a schedule to send messages automatically. When enabled, they respect the "Already sent" flags to prevent duplicates.
+          </div>
+        </div>
+
+        <!-- Bulk send section -->
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">📤 Bulk Send to Selected</h6>
+          </div>
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-auto">
+                <select id="bulkMessageType" class="form-select">
+                  <option value="">-- Select message type --</option>
+                  <option value="initial">Initial Message</option>
+                  <option value="followUp">Follow Up</option>
+                  <option value="finalReminder">Final Reminder</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="twoDayReminder">2-Day Reminder</option>
+                </select>
+              </div>
+              <div class="col-auto">
+                <button id="btnBulkSend" class="btn btn-success" disabled>Send to Selected</button>
+              </div>
+              <div class="col-auto text-muted small">
+                <span id="selectedCount">0 selected</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template Management -->
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">✏️ Message Templates</h6>
+          </div>
+          <div class="card-body">
+            <div class="nav nav-tabs mb-3" id="templateTabs">
+              <button class="nav-link active" id="tab-initial" type="button" data-template="initial">Initial</button>
+              <button class="nav-link" id="tab-followUp" type="button" data-template="followUp">Follow Up</button>
+              <button class="nav-link" id="tab-finalReminder" type="button" data-template="finalReminder">Final Reminder</button>
+              <button class="nav-link" id="tab-confirmed" type="button" data-template="confirmed">Confirmed</button>
+              <button class="nav-link" id="tab-twoDayReminder" type="button" data-template="twoDayReminder">2-Day Reminder</button>
+            </div>
+            <div>
+              <textarea id="templateContent" class="form-control" rows="8" placeholder="Template content..."></textarea>
+              <button id="btnSaveTemplate" class="btn btn-primary mt-2">Save Template</button>
+              <small class="text-muted d-block mt-2">Use {{fullName}} to insert the attendee's name in the template.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registrations list with checkboxes -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex mb-3">
+              <input id="search" class="form-control me-2" placeholder="Search registrations" />
+              <button id="btnRefresh" class="btn btn-outline-secondary">Refresh</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-striped" id="regsTable">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="selectAll" title="Select all" /></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Messages</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operation logs -->
+        <div class="card mb-4">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">📋 Recent Operations</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-sm" id="logsTable">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Type</th>
+                    <th>Count</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
