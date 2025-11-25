@@ -694,6 +694,7 @@ app.post('/bulk-send', requireDashboardAuth, async (req, res) => {
     let successCount = 0;
     let failedCount = 0;
     let skippedDuplicates = 0;
+    let skippedStatusMismatch = 0;
     const sendResults = []; // Track individual send results with reasons
 
     for (const reg of regs) {
@@ -713,6 +714,28 @@ app.post('/bulk-send', requireDashboardAuth, async (req, res) => {
           phone: reg.phone || reg.contactNumber,
           status: 'skipped',
           reason: `${messageType} message already sent previously`
+        });
+        continue;
+      }
+
+      // Check for correct payment status before sending
+      const allowedStatuses = {
+        initial: ['pending'],
+        followUp: ['pending'],
+        finalReminder: ['pending'],
+        confirmed: ['confirmed'],
+        twoDayReminder: ['confirmed'],
+      };
+
+      if (!allowedStatuses[messageType].includes(reg.paymentStatus)) {
+        console.log(`⏭️  Skipping ${reg.email} - incorrect status '${reg.paymentStatus}' for message '${messageType}'`);
+        skippedStatusMismatch++;
+        sendResults.push({
+          registrationId: reg._id.toString(),
+          email: reg.email,
+          phone: reg.phone || reg.contactNumber,
+          status: 'skipped',
+          reason: `Incorrect payment status: is '${reg.paymentStatus}', but message type '${messageType}' requires one of '${allowedStatuses[messageType].join(', ')}'`
         });
         continue;
       }
@@ -750,7 +773,7 @@ app.post('/bulk-send', requireDashboardAuth, async (req, res) => {
       successCount,
       failedCount,
       registrationIds: regs.map(r => r._id.toString()),
-      details: `Sent to ${successCount}/${regs.length} (${skippedDuplicates} skipped as duplicate, ${failedCount} failed)`
+      details: `Sent to ${successCount}/${regs.length} (${skippedDuplicates} skipped as duplicate, ${skippedStatusMismatch} skipped for status mismatch, ${failedCount} failed)`
     });
 
     return res.json({
@@ -759,10 +782,12 @@ app.post('/bulk-send', requireDashboardAuth, async (req, res) => {
       successCount,
       failedCount,
       skippedDuplicates,
+      skippedStatusMismatch,
       results: sendResults,
       summary: {
         sent: `${successCount} message(s) sent successfully`,
         skipped: `${skippedDuplicates} message(s) skipped (already sent)`,
+        skippedStatusMismatch: `${skippedStatusMismatch} message(s) skipped (incorrect payment status)`,
         failed: `${failedCount} message(s) failed to send`
       },
       logId: log._id
